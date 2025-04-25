@@ -22,18 +22,19 @@ public class ProductController {
     }
 
 	@GetMapping("/product/{id}")
-	public ProductDTO GetProduct(@PathVariable("id") Long id) {
+	public Product getProduct(@PathVariable("id") Long id) {
 
 		Product prfdb = ProductService.GetProduct(id);
 		
-		return productMapper.toProductDTO(prfdb);
+		return prfdb;
 	}
 
 	@GetMapping("/product")
-	public List<ProductDTO> GetAllProduccts(
+	public List<ProductDTO> getAllProduccts(
 			@RequestParam("page") int page,
 			@RequestParam("limit") int limit,
-			@RequestParam("sortby") String sortby){
+			@RequestParam("sortby") String sortby)
+	{
 		List<ProductDTO> allprfdb = ProductService.GetAllProducts(page-1, limit, sortby);
 		return allprfdb;
 		
@@ -41,7 +42,7 @@ public class ProductController {
 
 
 	@PostMapping("/product")
-	public ProductDTO PostProduct(@RequestBody ProductDTO productfromuser) {
+	public ProductDTO postProduct(@RequestBody ProductDTO productfromuser) {
 		ProductDTO saveProduct = ProductService.PostProduct(
 				productfromuser.getName(),
 				productfromuser.getPrice(),
