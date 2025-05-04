@@ -36,13 +36,13 @@ public class ProductService {
 	
 	public Product GetProduct(Long id) throws ProductNotFoundException {
 		
-		Product pFromCache= (Product)redisTemplate.opsForHash().get("PRODUCT_"+id, id);
-		System.out.println("done with pfromcache");
-		
-		if(pFromCache != null) {
-			System.out.println("hit");
-			return pFromCache;
-		}
+//		Product pFromCache= (Product)redisTemplate.opsForHash().get("PRODUCT_"+id, id);
+//		System.out.println("done with pfromcache");
+//
+//		if(pFromCache != null) {
+//			System.out.println("hit");
+//			return pFromCache;
+//		}
 		
 		Optional<Product> GetASingleProductById;
 		GetASingleProductById = productRepository.findById(id);
@@ -56,8 +56,8 @@ public class ProductService {
 			SingleProduct = GetASingleProductById.get();
 		}
 		
-		redisTemplate.opsForHash().put("PRODUCT_"+id, id, SingleProduct);
-		System.out.println("saved in cache");
+//		redisTemplate.opsForHash().put("PRODUCT_"+id, id, SingleProduct);
+//		System.out.println("saved in cache");
 		
 		return SingleProduct;
 	}
