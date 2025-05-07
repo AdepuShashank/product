@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: product-service
+  labels:
+    app: product-service
 spec:
   replicas: 1
   selector:
@@ -16,7 +18,25 @@ spec:
         - name: product-service
           image: ecomdevops.azurecr.io/product-service:latest
           ports:
-            - containerPort: 8081  # Update if your app runs on a different port
+            - containerPort: 8080
+          env:
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://eureka-service.default.svc.cluster.local/eureka/
+            - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+              value: "true"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+  # Update if your app runs on a different port
 ---
 apiVersion: v1
 kind: Service
